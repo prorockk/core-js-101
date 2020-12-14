@@ -128,8 +128,16 @@ function isTriangle(a, b, c) {
  *   { top:20, left:20, width: 20, height: 20 }    =>  false
  *
  */
-function doRectanglesOverlap(/* rect1, rect2 */) {
-  throw new Error('Not implemented');
+function doRectanglesOverlap(rect1, rect2) {
+  const left1 = rect1.left;
+  const top1 = rect1.top;
+  const right1 = rect1.left + rect1.width;
+  const bottom1 = rect1.top + rect1.height;
+  const left2 = rect2.left;
+  const top2 = rect2.top;
+  const right2 = rect2.left + rect2.width;
+  const bottom2 = rect2.top + rect2.height;
+  return (top1 < bottom2 && top2 < bottom1 && right1 > left2 && right2 > left1);
 }
 
 
@@ -274,8 +282,23 @@ function reverseInteger(num) {
  *   5436468789016589 => false
  *   4916123456789012 => false
  */
-function isCreditCardNumber(/* ccn */) {
-  throw new Error('Not implemented');
+function isCreditCardNumber(ccn) {
+  const str = ccn.toString().split('').reverse().join('');
+  const result = [];
+  for (let i = 0; i < str.length; i += 1) {
+    if (i % 2 === 0) result.push(str[i]);
+    else if (Number(str[i]) * 2 > 9) {
+      const str2 = (str[i] * 2).toString();
+      result.push(Number(str2[0]) + Number(str2[1]));
+    } else {
+      result.push(Number(str[i]) * 2);
+    }
+  }
+  let sum = 0;
+  for (let i = 0; i < result.length; i += 1) {
+    sum += Number(result[i]);
+  }
+  return sum % 10 === 0;
 }
 
 /**
@@ -329,8 +352,15 @@ function getDigitalRoot(num) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+function isBracketsBalanced(str) {
+  const result = [];
+  const brackets = ['[', ']', '(', ')', '{', '}', '<', '>'];
+  for (let i = 0; i < str.length; i += 1) {
+    if (str[i] === '[' || str[i] === '(' || str[i] === '{' || str[i] === '<') result.push(str[i]);
+    else if (result[result.length - 1] === brackets[brackets.indexOf(str[i]) - 1]) result.pop();
+    else result.push(str[i]);
+  }
+  return result.length === 0;
 }
 
 
@@ -354,8 +384,8 @@ function isBracketsBalanced(/* str */) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function toNaryString(num, n) {
+  return num.toString(n);
 }
 
 
@@ -371,8 +401,29 @@ function toNaryString(/* num, n */) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/webalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(pathes) {
+  const arr = pathes.map((el) => el.split('/'));
+  let arr2 = arr[0];
+  let result = [];
+  for (let i = 1; i < arr.length; i += 1) {
+    if (arr[i] && arr[i][0] !== '') {
+      result = [];
+      break;
+    }
+    if (result.length !== 0) {
+      arr2 = result.concat(arr[i]);
+      result = [];
+    } else arr2 = arr2.concat(arr[i]);
+    for (let j = 0; j < arr2.length; j += 1) {
+      if (arr2.lastIndexOf(arr2[j]) !== j) result.push(arr2[j]);
+      else {
+        result.push('');
+        break;
+      }
+    }
+  }
+  if (result.length === 3 && result[0] === result[1]) result.pop();
+  return result.join('/');
 }
 
 

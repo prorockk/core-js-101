@@ -573,7 +573,6 @@ function group(array, keySelector, valueSelector) {
     let result = [];
     if (n.has(keySelector(el))) result = n.get(keySelector(el));
     result.push(valueSelector(el));
-    console.log(n);
     n.set(keySelector(el), result);
     return el;
   });
